@@ -46,4 +46,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function jobApplications() {
+        return $this->hasMany(\App\Models\JobApplication::class);
+    }
 }

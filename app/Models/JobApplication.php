@@ -6,5 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobApplication extends Model
 {
-    //
+    protected $table = 'job_application';
+
+    protected $fillable = [
+        'title',
+        'company',
+        'link',
+        'status',
+        'notes',
+        'user_id',
+    ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
