@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class JobApplicationController extends Controller
 {
+
+    private function findUserJob($request, $id) {
+        return JobApplication::where('user_id',$request->user()->id)
+            ->findOrFail($id);
+    }
+
     public function index(Request $request) {
         $jobs = JobApplication::where('/user_id', $request->user()->id)
         ->orderBy('created_at', 'desc')
@@ -33,8 +39,24 @@ class JobApplicationController extends Controller
 
     public function show(Request $request, $id) {
 
-        $job = JobApplication::where('user_id',$request->user()->id)
-            ->findOrFail($id);
+        $job = $this->findUserJob($request, $id);
+
+        return response()->json($job);
+    }
+
+    public function update(Request $request, $id) {
+
+        $job = $this->findUserJob($request, $id);
+
+        $data = $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'company' => 'sometimes|nullable|string|max:255',
+            'link' => 'sometimes|nullable|url|max:2048',
+            'status' => 'sometimes|required|string|in:saved,applied,interview,offer,rejected',
+            'notes' => 'sometimes|nullable|string',
+        ]);
+
+        $job->update($data);
 
         return response()->json($job);
     }
