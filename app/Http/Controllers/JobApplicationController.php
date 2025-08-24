@@ -30,4 +30,12 @@ class JobApplicationController extends Controller
 
         return response()->json($job, 201);
     }
+
+    public function show(Request $request, $id) {
+
+        $job = JobApplication::where('user_id',$request->user()->id)
+            ->findOrFail($id);
+
+        return response()->json($job);
+    }
 }
