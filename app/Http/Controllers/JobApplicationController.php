@@ -60,4 +60,12 @@ class JobApplicationController extends Controller
 
         return response()->json($job);
     }
+
+    public function destroy(Request $request, $id) {
+        $job = $this->findUserJob($request, $id);
+
+        $job->delete();
+
+        return response()->json(['message' => 'Deleted'], 200);
+    }
 }
